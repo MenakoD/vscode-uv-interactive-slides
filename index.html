@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VS Code Interactive Python with uv</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .slide-container {
+            width: 80vw;
+            max-width: 900px;
+            height: 70vh;
+            background: #1e293b;
+            border-radius: 12px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px;
+            box-sizing: border-box;
+            border: 1px solid #334155;
+        }
+        .slide-content {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        h2 {
+            color: #38bdf8;
+            margin-top: 0;
+            font-size: 2rem;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 15px;
+        }
+        ul {
+            line-height: 1.8;
+            font-size: 1.2rem;
+        }
+        code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 1.05rem;
+        }
+        pre {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #334155;
+            font-size: 0.95rem;
+        }
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #334155;
+            padding-top: 20px;
+        }
+        button {
+            background: #0284c7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #0ea5e9;
+        }
+        button:disabled {
+            background: #475569;
+            cursor: not-allowed;
+        }
+        .slide-counter {
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slide-container">
+        <!-- Slide 1 -->
+        <div class="slide" id="slide-1">
+            <div class="slide-content">
+                <h2>VS Code Interactive Sessions with uv</h2>
+                <p style="font-size: 1.3rem; color: #94a3b8;">Set up a lightning-fast Python workflow inside standard <code>.py</code> files using the uv package manager.</p>
+                <ul>
+                    <li><strong>No need for .ipynb notebooks:</strong> Work directly with Python scripts.</li>
+                    <li><strong>Standard Library Sample:</strong> Explore code execution step-by-step using built-in modules like <code>pathlib</code> and <code>json</code>.</li>
+                    <li><strong>Blazing Fast:</strong> Powered entirely by the modern <code>uv</code> package manager.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide hidden" id="slide-2">
+            <div class="slide-content">
+                <h2>The Code Sample</h2>
+                <p>Use code cells (<code>#%%</code>) in your standard <code>.py</code> file to run snippets interactively:</p>
+                <pre><code>#%%
+from pathlib import Path
+import json
+
+# Define path and sample data
+current_dir = Path.cwd()
+print(f"Working Directory: {current_dir}")
+
+sample_data = {
+    "project": "VS Code Interactive with uv",
+    "status": "Active",
+    "items": [10, 20, 30, 40, 50]
+}
+
+total_sum = sum(sample_data["items"])
+print(f"Total Sum: {total_sum}")</code></pre>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide hidden" id="slide-3">
+            <div class="slide-content">
+                <h2>Automatic Locking with <code>uv add</code></h2>
+                <p style="font-size: 1.2rem;">When you run a command like:</p>
+                <pre><code>uv add requests</code></pre>
+                <p style="font-size: 1.2rem;"><code>uv</code> does <strong>two things automatically</strong>:</p>
+                <ul>
+                    <li>Adds the package to your <code>pyproject.toml</code> configuration file.</li>
+                    <li>Automatically creates or updates your <strong><code>uv.lock</code></strong> file, pinning exact dependency versions.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide hidden" id="slide-4">
+            <div class="slide-content">
+                <h2>Syncing & Managing Dependencies in VS Code</h2>
+                <ul>
+                    <li><strong>Sync Environments:</strong> Run <code>uv sync</code> to align your local virtual environment (<code>.venv</code>) precisely with your lock file.</li>
+                    <li><strong>VS Code Integration:</strong> Select your <code>uv</code>-managed virtual environment as your Jupyter Kernel.</li>
+                    <li><strong>Instant Reload:</strong> If you add packages, simply restart your Jupyter Interactive kernel in VS Code to load them right away.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="controls">
+            <button id="prev-btn" onclick="changeSlide(-1)" disabled>Previous</button>
+            <span class="slide-counter" id="counter">Slide 1 of 4</span>
+            <button id="next-btn" onclick="changeSlide(1)">Next</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 4;
+
+        function changeSlide(direction) {
+            document.getElementById(`slide-${currentSlide}`).classList.add('hidden');
+            currentSlide += direction;
+            document.getElementById(`slide-${currentSlide}`).classList.remove('hidden');
+
+            document.getElementById('prev-btn').disabled = currentSlide === 1;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides;
+            document.getElementById('counter').innerText = `Slide ${currentSlide} of ${totalSlides}`;
+        }
+    </script>
+</body>
+</html>
